@@ -7,6 +7,7 @@ import InputField from "../TextField/InputField";
 import { Plus, Save } from "lucide-react";
 import useFetchSkill from "../../Hook/SkillHook/useFetchSkill";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import CheckEnvironment from "../../Hook/CheckEnvironment/CheckEnvironment";
 
 const UserSkillUpdate = ({close}) => {
   const [category, setCategory] = useState();
@@ -16,7 +17,7 @@ const UserSkillUpdate = ({close}) => {
   const queryClient = useQueryClient();
 
   const { fetchSkill } = useFetchSkill();
-
+  const { base_url } = CheckEnvironment();
 
   const user = useSelector((state) => state.auth.user);
 
@@ -36,7 +37,7 @@ const UserSkillUpdate = ({close}) => {
     mutationFn: async ({ category, skills }) => {
       try {
         const response = await axios.post(
-          "/api/create-skill",
+          `${base_url}/api/create-skill`,
           {
             category,
             skills,
@@ -84,7 +85,7 @@ const UserSkillUpdate = ({close}) => {
     mutationFn: async ({ category, skills }) => {
       try {
         const response = await axios.put(
-          `/api/update-skill/${fetchSkill[0]?.id}`,
+          `${base_url}/api/update-skill/${fetchSkill[0]?.id}`,
           {
             category,
             skills,

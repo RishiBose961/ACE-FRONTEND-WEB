@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { logoutUserAction } from "../../slice/authSlice";
 import UserSkillUpdate from "./UserSkillUpdate";
+import CheckEnvironment from "../../Hook/CheckEnvironment/CheckEnvironment";
 
 export default function UserUpdateProfile() {
   let [isOpen, setIsOpen] = useState(false);
@@ -16,7 +17,7 @@ export default function UserUpdateProfile() {
   const [error, setError] = useState("");
 
   const dispatch = useDispatch();
-
+  const { base_url } = CheckEnvironment();
   function open() {
     setIsOpen(true);
   }
@@ -28,7 +29,7 @@ export default function UserUpdateProfile() {
     mutationFn: async ({ name }) => {
       try {
         const response = await axios.put(
-          "/api/update",
+         `${base_url}/api/update`,
           { name }, // Request payload
           {
             headers: {
