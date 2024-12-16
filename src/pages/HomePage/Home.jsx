@@ -1,5 +1,6 @@
 import AnimateCard from "../../components/Card/AnimateCard";
 import Pagination from "../../components/Pagination/Pagination";
+import Skeleton from "../../components/Skeleton/Skeleton";
 import UseFetchAllProject from "../../Hook/PostHook/UseFetchAllProject";
 import ProfileDowload from "../ProfilePage/ProfileDowload";
 const Home = () => {
@@ -17,7 +18,6 @@ const Home = () => {
 
 
 
-
   return (
     <>
       <ProfileDowload />
@@ -26,8 +26,11 @@ const Home = () => {
           <h1 className="text-3xl font-bold text-center mb-10">
             Ace the other project
           </h1>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {fetchProjectAll?.map((card, index) => (
+        
+            {isPending ? <Skeleton/>:
+            <>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+             {fetchProjectAll?.map((card, index) => (
               <AnimateCard
               isPending={isPending}
                 key={index}
@@ -38,7 +41,11 @@ const Home = () => {
                 pcategory={card.pcategory}
               />
             ))}
-          </div>
+            </div>
+            </>
+            }
+           
+    
         </div>
         <div className="flex justify-center pb-4 mt-2">
           <Pagination
