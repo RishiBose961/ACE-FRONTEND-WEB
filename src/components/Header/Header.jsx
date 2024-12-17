@@ -16,7 +16,7 @@ const Header = () => {
       <div className="navbar bg-base-100 pt-5 pb-5">
         <div className="flex-1">
           <Link to={`/`}  className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-            ACE
+            ACE-X
           </Link>
         </div>
         {isAuthenticated ? (
