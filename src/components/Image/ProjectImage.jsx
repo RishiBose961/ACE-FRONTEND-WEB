@@ -15,6 +15,8 @@ const ProjectImage = ({
   const location = useLocation();
   const url = location.pathname.split("/")[1];
 
+  const d = new Date().toLocaleDateString();
+  console.log(d);
   return (
     <>
       <ol className="relative border-s-2  border-cyan-500   m-5">
@@ -28,13 +30,14 @@ const ProjectImage = ({
           <h3 className="flex items-center mb-1 text-lg font-semibold text-gray-900 text-pretty dark:text-white">
             {item?.title || title || "Add Project Title"}
 
-            {item?.createdAt}
-            <span
-              className="bg-red-100 text-red-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900
-             dark:text-red-300 ms-3"
-            >
-              New
-            </span>
+            {new Date(item?.createdAt).toDateString() ===
+            new Date().toDateString() ? (
+              <span className="bg-red-100 text-red-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300 ms-3">
+                New
+              </span>
+            ) : (
+              ""
+            )}
           </h3>
           <time className="block mb-4 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">
             {new Date(item?.createdAt).toLocaleDateString() ||
