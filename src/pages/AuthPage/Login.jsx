@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { loadUser, loginUserAction } from "../../slice/authSlice";
 import { Link, Navigate, Outlet } from "react-router";
 import CheckEnvironment from "../../Hook/CheckEnvironment/CheckEnvironment";
+import { GoogleLogin } from "@react-oauth/google";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -15,7 +16,6 @@ export default function Login() {
   const dispatch = useDispatch();
 
   const { base_url } = CheckEnvironment();
-
 
   const { isAuthenticated, isLoading, user } = useSelector(
     (state) => state.auth
@@ -61,8 +61,6 @@ export default function Login() {
     return <div>Loading...</div>;
   }
 
-  
-
   if (isAuthenticated) {
     return isAuthenticated ? (
       <Navigate to={`/${user.username}`} replace />
@@ -71,53 +69,82 @@ export default function Login() {
     );
   }
 
+  // const clientId = import.meta.env.VITE_UPLOAD_PRESET_CLIENT_ID;
+  // useEffect(() => {
+  //   gapi.load("client:auth2", () => {
+  //     gapi.auth2.init({ clientId: clientId });
+  //   });
+  // }, []);
+
+  // const responseSuccessGoogle = async (res) => {
+  //   const token = res?.credential;
+  //   try {
+  //     const res = await googlelog({ credential: token }).unwrap();
+  //     dispatch(setCredentials({ ...res }));
+  //     navigate("/");
+  //   } catch (error) {
+  //     toast.error(error?.data?.message || error);
+  //   }
+  // };
+
+  // const responseErrorGoogle = () => {
+  //   alert("Authentication failed");
+  // };
+
   return (
-    <div className="flex items-center justify-center">
-      <div className="w-full max-w-md rounded-lg shadow-md p-8">
-        <h2 className="text-2xl font-bold text-center mb-4">Login</h2>
-        <p className="text-center  mb-8">
-          Enter your credentials to access your account
-        </p>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <InputField
-              nameTitle="Email"
-              placeHolder="Enter Email"
-              type={"text"}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
+    <div>
+      <div className="flex min-h-screen items-center justify-center px-4">
+        <div className="w-full max-w-md space-y-8 rounded-xl bg-gray-800/50 p-8 backdrop-blur-sm">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold text-white">Login</h2>
+            <p className="mt-2 text-sm text-gray-400">
+              Enter your credentials to access your account
+            </p>
           </div>
-          <div>
-            <InputField
-              nameTitle="Password"
-              type={"password"}
-              placeHolder="Enter Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
-          <div className="flex justify-between">
-            <Link to='/register' className="text-sm text-blue-500 hover:text-blue-700">
-              Don’t have an account? Join
-            </Link>
-            <a href="#" className="text-sm text-blue-500 hover:text-blue-700">
-              Forgot Password?
-            </a>
-          </div>
-          {error && <p className="text-red-500 text-sm">{error}</p>}
-          <div>
-            <div>
-              <button
-                type="submit"
-                disabled={loginMutation.isPending }
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              >
-                {loginMutation.isPending  ? "Signing In..." : "Sign In"}
-              </button>
+
+          <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+            <div className="space-y-4">
+              <div>
+                <InputField
+                  nameTitle="Email"
+                  placeHolder="Enter Email"
+                  type={"text"}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+
+              <div>
+                <InputField
+                  nameTitle="Password"
+                  type={"password"}
+                  placeHolder="Enter Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </div>
             </div>
-          </div>
-        </form>
+            {error && <p className="text-red-500 text-sm">{error}</p>}
+            <div className="flex justify-between">
+              <Link
+                to="/register"
+                className="text-sm text-blue-500 hover:text-blue-700"
+              >
+                Don’t have an account? Join
+              </Link>
+              <a href="#" className="text-sm text-blue-500 hover:text-blue-700">
+                Forgot Password?
+              </a>
+            </div>
+
+            <button
+              type="submit"
+              className="w-full rounded-lg bg-purple-600 px-4 py-2.5 text-center text-sm font-semibold text-white transition-all hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-gray-800"
+            >
+              {loginMutation.isPending ? "Signing In..." : "Sign In"}
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );

@@ -15,8 +15,8 @@ const ProjectImage = ({
   const location = useLocation();
   const url = location.pathname.split("/")[1];
 
-  const d = new Date().toLocaleDateString();
-  console.log(d);
+
+
   return (
     <>
       <ol className="relative border-s-2  border-cyan-500   m-5">

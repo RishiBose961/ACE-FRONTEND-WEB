@@ -6,6 +6,7 @@ import Button from "../../components/Button/Button";
 import ProjectImage from "../../components/Image/ProjectImage";
 import InputField from "../../components/TextField/InputField";
 import TextArea from "../../components/TextField/TextArea";
+import CheckEnvironment from "../../Hook/CheckEnvironment/CheckEnvironment";
 
 const Project = () => {
   const [title, settitle] = useState("");
@@ -20,7 +21,7 @@ const Project = () => {
   const [uploadProgress, setUploadProgress] = useState(0);
 
   const { user } = useSelector((state) => state.auth);
-
+  const { base_url } = CheckEnvironment();
   const createPostMutation = useMutation({
     mutationFn: async ({
       projectImage,
@@ -31,7 +32,7 @@ const Project = () => {
       prepository,
     }) => {
       const response = await axios.post(
-        "/api/create-project",
+        `${base_url}/api/create-project`,
         {
           projectImage,
           title,
