@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { createSlice } from "@reduxjs/toolkit";
+import { useState } from "react";
 
 const loadUserFromStorage = () => {
   try {
@@ -25,6 +26,8 @@ const authSlice = createSlice({
       state.isAuthenticated = true;
       state.isLoading = false;
       localStorage.setItem("activeAccount", JSON.stringify(action.payload));
+      localStorage.setItem("accounts", JSON.stringify([action.payload]));
+      
     },
     logoutUserAction: (state) => {
       state.user = null;

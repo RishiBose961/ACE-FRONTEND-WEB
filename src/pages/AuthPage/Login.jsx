@@ -1,15 +1,15 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 
-/* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
 import InputField from "../../components/TextField/InputField";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { loadUser, loginUserAction } from "../../slice/authSlice";
-import { Link, Navigate, Outlet } from "react-router";
+import { Link, Navigate } from "react-router";
 import CheckEnvironment from "../../Hook/CheckEnvironment/CheckEnvironment";
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
-
+import {gapi} from 'gapi-script'
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -22,7 +22,12 @@ export default function Login() {
     (state) => state.auth
   );
 
-
+  const clientId = import.meta.env.VITE_GOOGLE_PRESET_CLIENT_ID;
+  useEffect(() => {
+    gapi.load("client:auth2", () => {
+      gapi.auth2.init({ clientId: clientId });
+    });
+  }, []);
 
  
   const loginMutation = useMutation({
@@ -34,6 +39,7 @@ export default function Login() {
       dispatch(loginUserAction(response.data));
       return response.data; // Return response data
     },
+    // eslint-disable-next-line no-unused-vars
     onSuccess: (data) => {
       alert("Login successful!");
 
