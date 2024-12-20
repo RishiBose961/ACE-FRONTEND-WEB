@@ -1,3 +1,4 @@
+
 /* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
 import InputField from "../../components/TextField/InputField";
@@ -7,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { loadUser, loginUserAction } from "../../slice/authSlice";
 import { Link, Navigate, Outlet } from "react-router";
 import CheckEnvironment from "../../Hook/CheckEnvironment/CheckEnvironment";
-import { GoogleLogin } from "@react-oauth/google";
+import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -20,6 +21,10 @@ export default function Login() {
   const { isAuthenticated, isLoading, user } = useSelector(
     (state) => state.auth
   );
+
+
+
+ 
   const loginMutation = useMutation({
     mutationFn: async ({ email, password }) => {
       const response = await axios.post(`${base_url}/api/login`, {
@@ -69,27 +74,33 @@ export default function Login() {
     );
   }
 
-  // const clientId = import.meta.env.VITE_UPLOAD_PRESET_CLIENT_ID;
-  // useEffect(() => {
-  //   gapi.load("client:auth2", () => {
-  //     gapi.auth2.init({ clientId: clientId });
-  //   });
-  // }, []);
-
-  // const responseSuccessGoogle = async (res) => {
-  //   const token = res?.credential;
-  //   try {
-  //     const res = await googlelog({ credential: token }).unwrap();
-  //     dispatch(setCredentials({ ...res }));
-  //     navigate("/");
-  //   } catch (error) {
-  //     toast.error(error?.data?.message || error);
-  //   }
-  // };
-
-  // const responseErrorGoogle = () => {
-  //   alert("Authentication failed");
-  // };
+ 
+    const responseSuccessGoogle = async (res) => {
+      const token = res?.credential;
+      
+      if (!token) {
+        console.error("Google authentication token is missing.");
+        return;
+      }
+  
+      try {
+        const response = await axios.post(`${base_url}/api/google_signing`, {
+          credential:token,
+        });
+        dispatch(loginUserAction(response.data));
+        return response.data;
+      } catch (error) {
+        console.error(
+          "Error during Google sign-in:",
+          error?.response?.data?.message || error.message || error
+        );
+      }
+    };
+  
+    const responseErrorGoogle = () => {
+      alert("Google authentication failed. Please try again.");
+    };
+  
 
   return (
     <div>
@@ -144,6 +155,17 @@ export default function Login() {
               {loginMutation.isPending ? "Signing In..." : "Sign In"}
             </button>
           </form>
+          <GoogleOAuthProvider
+            clientId={import.meta.env.VITE_GOOGLE_PRESET_CLIENT_ID}
+          >
+            <GoogleLogin
+              //  responseSuccessGoogle
+              className="w-full"
+              onSuccess={responseSuccessGoogle}
+              onError={responseErrorGoogle}
+              useOneTap
+            />
+          </GoogleOAuthProvider>
         </div>
       </div>
     </div>

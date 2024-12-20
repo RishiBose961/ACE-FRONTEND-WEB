@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const loadUserFromStorage = () => {
   try {
-    const userInfo = localStorage.getItem("userInfo");
+    const userInfo = localStorage.getItem("activeAccount");
     return userInfo ? JSON.parse(userInfo) : null;
   } catch (error) {
     return null;
@@ -24,13 +24,13 @@ const authSlice = createSlice({
       state.user = action.payload;
       state.isAuthenticated = true;
       state.isLoading = false;
-      localStorage.setItem("userInfo", JSON.stringify(action.payload));
+      localStorage.setItem("activeAccount", JSON.stringify(action.payload));
     },
     logoutUserAction: (state) => {
       state.user = null;
       state.isAuthenticated = false;
       state.isLoading = false;
-      localStorage.removeItem("userInfo");
+      localStorage.removeItem("activeAccount");
     },
     setUserAction: (state, action) => {
       state.user = action.payload;

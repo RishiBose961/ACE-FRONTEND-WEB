@@ -20,6 +20,7 @@ import store from "./store.js";
 import PrivateRoute from "./components/PrivateRoute.jsx";
 import MainPage from "./pages/MainPage/MainPage.jsx";
 import GetPostBidPage from "./pages/PostById/GetPostBidPage.jsx";
+import Multi from "./pages/AuthPage/Multi.jsx";
 
 const queryClient = new QueryClient();
 
@@ -28,7 +29,7 @@ const router = createBrowserRouter(
     <Route path="/" element={<App />}>
       <Route path="/register" element={<Register />} />
       <Route path="/login" element={<Login />} />
-
+      {/* <Route path="/multi" element={<Multi />} /> */}
       <Route path="" element={<PrivateRoute />}>
         <Route index={true} path="/" element={<Home />} />
         <Route path="/new" element={<ProjectPage />} />
