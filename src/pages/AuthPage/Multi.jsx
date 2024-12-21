@@ -39,7 +39,7 @@ const Multi = () => {
         setAccounts((prevAccounts) => [...prevAccounts, data]);
       }
 
-      //   // Set the new account as active
+     // Set the new account as active
       setActiveAccount(data);
     },
     onError: (error) => {

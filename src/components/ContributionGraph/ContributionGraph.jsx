@@ -59,6 +59,7 @@ const ContributionGraph = () => {
   // Get current month's data
   const [currentMonth, days] = monthsData[currentPage] || [null, []];
 
+
   return (
     <div className="w-full max-w-5xl bg-black/50 rounded-lg shadow-md p-6 relative mx-auto">
       <p className="mb-4 text-center text-white">Month-wise ACE activity</p>
@@ -66,7 +67,7 @@ const ContributionGraph = () => {
       {isPending ? <p className="text-center text-gray-400">Loading...</p>:
       <>
       
-      {currentMonth && (
+      {currentMonth=== null ? "No contribution has been made." :(
         <div className="mb-4">
           <h3 className="text-sm font-semibold mb-2 text-center text-white">
             {new Date(`${currentMonth}-01`).toLocaleString('default', { month: 'long', year: 'numeric' })}

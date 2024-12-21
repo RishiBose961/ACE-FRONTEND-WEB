@@ -30,7 +30,7 @@ const InformationProfileUrl = () => {
       }
     
       if (isProfileLoading) {
-        return <p>Loading...</p>;
+        return <p>Loading..</p>;
       }
 
       return {profileDatas}

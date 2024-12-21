@@ -2,7 +2,7 @@
 import { Button, Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
-import { Check, UserCircle2 } from "lucide-react";
+import { Check, PencilLine, UserCircle2 } from "lucide-react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -73,7 +73,7 @@ export default function UserUpdateProfile() {
   return (
     <>
     <div className="p-2 rounded-full hover:bg-gray-700/50 transition-colors">
-    <UserCircle2
+    <PencilLine
         onClick={open}
         className="cursor-pointer  hover:text-purple-500"
       />
