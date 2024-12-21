@@ -7,6 +7,7 @@ import CheckEnvironment from "../CheckEnvironment/CheckEnvironment";
 
 const LikeButton = ({ postedId }) => {
   const user = useSelector((state) => state.auth.user);
+
   const queryClient = useQueryClient();
   const { base_url } = CheckEnvironment();
 
@@ -45,26 +46,21 @@ const LikeButton = ({ postedId }) => {
       return response.json();
     },
     onMutate: async () => {
-      // Optimistically update UI
-      queryClient.setQueryData(["fetchLikeCounts", postedId], (oldData) => {
-        if (!oldData) return { count: 1 };
-        return likeposts
-          ? { ...oldData, count: Math.max(0, oldData.count - 1) }
-          : { ...oldData, count: oldData.count + 1 };
-      });
-
+      // Optimistic update for UI
       queryClient.setQueryData(["likeposts"], (oldData) => {
         if (!oldData) return [];
         return likeposts
-          ? oldData.filter((item) => item.postId !== postedId)
-          : [...oldData, { postId: postedId }];
+          ? oldData.filter((item) => item.postId !== postedId) // Remove if already liked
+          : [...oldData, { postId: postedId }]; // Add if not already liked
       });
     },
-    onError: (error) => {
+    onError: (error, _, rollback) => {
       console.error("Error creating like:", error);
+      // Rollback optimistic update if needed
+      if (rollback) rollback();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(["fetchLikeCounts", postedId]);
+      // Invalidate queries to synchronize the actual database state
       queryClient.invalidateQueries(["likeposts"]);
     },
   });
