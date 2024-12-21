@@ -19,8 +19,10 @@ const LikeCount = ({ postedId }) => {
       if (!response.ok) throw new Error("Failed to fetch like count");
       return response.json();
     },
-    staleTime: 30000, // Cache the result for 30 seconds
+    staleTime: 30000,
   });
+
+  const likeCount = fetchLikeCount?.count ?? 0;
 
   if (isLoading)
     return (
@@ -31,7 +33,7 @@ const LikeCount = ({ postedId }) => {
 
   if (isError) return <div>Error: {error.message}</div>;
 
-  return <div>{fetchLikeCount?.count ?? 0}</div>;
+  return <div>{likeCount}</div>;
 };
 
 export default LikeCount;
