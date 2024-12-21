@@ -1,31 +1,37 @@
 /* eslint-disable react/prop-types */
 import { useQuery } from "@tanstack/react-query";
 import CheckEnvironment from "../CheckEnvironment/CheckEnvironment";
-const { base_url } = CheckEnvironment();
+
 const LikeCount = ({ postedId }) => {
+  const { base_url } = CheckEnvironment();
+
   const {
-    isPending,
-    error,
-    isError,
     data: fetchLikeCount,
+    isLoading,
+    isError,
+    error,
   } = useQuery({
     queryKey: ["fetchLikeCounts", postedId],
     queryFn: async () => {
-      return await fetch(`${base_url}/api/get-count/${postedId}`, {
+      const response = await fetch(`${base_url}/api/get-count/${postedId}`, {
         method: "GET",
-      }).then((res) => res.json());
+      });
+      if (!response.ok) throw new Error("Failed to fetch like count");
+      return response.json();
     },
+    staleTime: 30000, // Cache the result for 30 seconds
   });
 
-  if (isPending)
+  if (isLoading)
     return (
       <div>
         <span className="loading loading-ring loading-sm"></span>
       </div>
     );
+
   if (isError) return <div>Error: {error.message}</div>;
 
-  return <div>{fetchLikeCount?.count}</div>;
+  return <div>{fetchLikeCount?.count ?? 0}</div>;
 };
 
 export default LikeCount;
